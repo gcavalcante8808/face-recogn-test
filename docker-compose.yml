@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+  face:
+    image: face
+    build: .
+    volumes:
+     - ./known/base.jpg:/usr/src/code/base.jpg:ro
+     - ./unknown:/usr/src/code/unknown:ro

@@ -1,0 +1,7 @@
+flask
+face_recognition
+requests
+pandas
+gunicorn
+mkl
+pytest-flask
