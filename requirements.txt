@@ -5,3 +5,6 @@ pandas
 gunicorn
 mkl
 pytest-flask
+falcon
+falcon-multipart
+gunicorn

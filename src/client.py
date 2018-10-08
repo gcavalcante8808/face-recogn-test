@@ -7,7 +7,9 @@ import pandas as pd
 from collections import Counter
 
 
-url = 'http://localhost:5000'
+SERVER_PORT = os.getenv('SERVER_PORT', 5000)
+
+url = 'http://localhost:{}'.format(SERVER_PORT)
 
 execution_time = list()
 execution_results = list()

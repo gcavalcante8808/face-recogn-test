@@ -4,6 +4,8 @@ services:
   face:
     image: face
     build: .
+    environment:
+      - SERVER_PORT: 5000
     volumes:
      - ./known/base.jpg:/usr/src/code/base.jpg:ro
      - ./unknown:/usr/src/code/unknown:ro
