@@ -4,8 +4,12 @@ services:
   face:
     image: face
     build: .
+    # --reload is usefull for dev purposes.
+#    command: ["gunicorn","--reload","-c","gunicorn.py","app_falcon:app"]
     environment:
-      - SERVER_PORT: 5000
+     - SERVER_PORT:5000
     volumes:
+    #Mount the source in the folder is useful for dev purposes.
+    # - ./src:/usr/src/code
      - ./known/base.jpg:/usr/src/code/base.jpg:ro
      - ./unknown:/usr/src/code/unknown:ro

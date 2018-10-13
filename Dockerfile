@@ -38,12 +38,15 @@ ENV LC_ALL=C.UTF-8 LANG=C.UTF-8 VERSION=19.16
 WORKDIR /usr/src
 COPY --from=builder /usr/src/dlib-19.16/build/*.deb .
 COPY --from=builder /usr/src/dlib-19.16/dist/*.whl .
-COPY requirements.txt .
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends python3-minimal \
     python3-setuptools \
-    ca-certificates
-    
+    python3-dev \
+    ca-certificates \
+    chrpath
+
+COPY requirements.txt .
 RUN easy_install3 pip wheel && \
     dpkg -i *.deb && \
     pip install *.whl && \
@@ -53,4 +56,4 @@ RUN easy_install3 pip wheel && \
 ADD src /usr/src/code/
 WORKDIR /usr/src/code
 
-CMD ["python","app.py"]
+CMD ["gunicorn","app_falcon:app","-c","gunicorn.py","--log-config","logging.conf"]

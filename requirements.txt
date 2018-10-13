@@ -8,3 +8,5 @@ pytest-flask
 falcon
 falcon-multipart
 gunicorn
+gevent
+json-logging-py
