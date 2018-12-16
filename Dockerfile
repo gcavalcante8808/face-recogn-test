@@ -12,11 +12,11 @@ RUN apt-get update && \
     checkinstall \
     python3-minimal \
     python3-setuptools \
-    python3-dev
+    python3-dev \
+    libopenblas-dev
 
 # Install Neede Python Packages
-RUN easy_install3 pip wheel && \
-    pip install --no-cache-dir mkl-devel
+RUN easy_install3 pip wheel 
     
 # Download and Unpack dlib.
 RUN curl -L --output dlib-${VERSION}.tar.bz2 http://dlib.net/files/dlib-${VERSION}.tar.bz2 && \
@@ -43,17 +43,19 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends python3-minimal \
     python3-setuptools \
     python3-dev \
+    libopenblas-base \
     ca-certificates \
     chrpath
 
 COPY requirements.txt .
 RUN easy_install3 pip wheel && \
     dpkg -i *.deb && \
-    pip install *.whl && \
-    pip install --no-cache-dir -r requirements.txt && \
+    pip install *.whl
+
+RUN pip install --no-cache-dir -r requirements.txt && \
     ln -s /usr/bin/python3 /usr/bin/python
 
 ADD src /usr/src/code/
 WORKDIR /usr/src/code
 
-CMD ["gunicorn","app_falcon:app","-c","gunicorn.py","--log-config","logging.conf"]
+CMD ["gunicorn","app_falcon:app","-c","gunicorn.py"]
