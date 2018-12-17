@@ -8,10 +8,10 @@ import falcon
 import face_recognition
 
 
-from wsgiref import simple_server
+from werkzeug.serving import run_simple
 from io import BytesIO
 
-
+from middleware import MatchResultLoggingMiddleware
 from storage import s3_client as storage
 
 server_port = os.getenv('SERVER_PORT', 5000)
@@ -62,9 +62,9 @@ class ImageDetectionResource(object):
         if unknown_encoding:
             comp = self.compare_faces(unknown_encoding, req)
             if comp:
-                resp.body = ("Face Recognized")
+                resp.body = json.dumps({"matched": True, "person": "Jhonatan GoldSmith"})
             else:
-                resp.body = ("Face not Recognized")
+                resp.body = json.dumps({"matched": False, "person": None})
 
         self.save_to_storage(image, filename, req)
         resp.status = falcon.HTTP_200
@@ -97,12 +97,12 @@ class ImageDetectionResource(object):
         """
         storage.upload_fileobj(BytesIO(image), filename)
 
-app = falcon.API()
-
+app = falcon.API(middleware=[
+    MatchResultLoggingMiddleware(),
+])
 
 resources = ImageDetectionResource()
 app.add_route('/', resources)
 
 if __name__ == '__main__':
-    httpd = simple_server.make_server('127.0.0.1', server_port, app)
-    httpd.serve_forever()
+    run_simple('0.0.0.0', 5000, app, use_reloader=True, use_debugger=True)
