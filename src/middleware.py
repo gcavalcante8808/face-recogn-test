@@ -1,11 +1,17 @@
 import logging
 import json
-
+import time
 
 logger = logging.getLogger()
 
 
 class MatchResultLoggingMiddleware(object):
+    def process_request(self, req, resp):
+        """
+        Start the Timer.
+        """
+        req.start_time = time.time()
+
     """
     Create a log information for a result; matched or not matched.
     """
@@ -13,11 +19,12 @@ class MatchResultLoggingMiddleware(object):
         """
         Log client, match and name.
         """
-        raise NotImplementedError
+        elapsed = time.time()- req.start_time
         data = {
             "client": req.media.get('client', 'unknown'),
             "filename": req.media.get('filename', 'unknown_image'),
-            "matched": resp.body.get('')
+            "matched": json.loads(resp.body).get("matched"),
+            "person": json.loads(resp.body).get("person"),
+            "elapsed_time": elapsed
         }
-
-        json.dumps(data)
+        logger.warning(json.dumps(data))

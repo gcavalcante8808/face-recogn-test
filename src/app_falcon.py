@@ -69,7 +69,7 @@ class ImageDetectionResource(object):
         self.save_to_storage(image, filename, req)
         resp.status = falcon.HTTP_200
 
-    @timeit
+    #@timeit
     def base64toimage(self, encoded, req):
         """
         Convert base64string into bytes like img.
@@ -78,24 +78,25 @@ class ImageDetectionResource(object):
         
         return base
 
-    @timeit
+    #@timeit
     def get_face_encondings(self, image, req):
         unknown_image = face_recognition.load_image_file(BytesIO(image))
         unknown_encoding = face_recognition.face_encodings(unknown_image)
 
         return unknown_encoding
 
-    @timeit
+    #@timeit
     def compare_faces(self, unknown_encoding, req):
         comp = face_recognition.compare_faces([biden_encoding], unknown_encoding[0])
         return comp
 
-    @timeit
+    #@timeit
     def save_to_storage(self, image, filename, req):
         """
         Send binary file to storage.
         """
         storage.upload_fileobj(BytesIO(image), filename)
+
 
 app = falcon.API(middleware=[
     MatchResultLoggingMiddleware(),
