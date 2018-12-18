@@ -24,13 +24,13 @@ services:
      - ./unknown:/usr/src/code/unknown:ro
     depends_on:
       - fluentd
-#    logging:
-#      driver: fluentd
-#      options:
-#        fluentd-address: "tcp://192.168.122.1:24224"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "tcp://127.0.0.1:24224"
 #        fluentd-async-connect: "true"
-#        # As stated in https://docs.docker.com/config/containers/logging/log_tags/
-#        tag: "frecognition.{{.ImageName}}/{{.Name}}/{{.ID}}"
+        # As stated in https://docs.docker.com/config/containers/logging/log_tags/
+        tag: "frecognition.{{.ImageName}}/{{.Name}}/{{.ID}}"
 
   fluentd:
     image: fluentd:es
@@ -42,7 +42,7 @@ services:
       - "24224:24224/udp"
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
     environment:
      - cluster.name=docker-cluster
      - bootstrap.memory_lock=true
@@ -57,8 +57,7 @@ services:
       - esdata2:/usr/share/elasticsearch/data
 
   kibana:
-    image: kibana:presentation
-    build: kibana/
+    image: docker.elastic.co/kibana/kibana:6.5.3
     restart: always
     networks:
      - default
