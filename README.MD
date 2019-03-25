@@ -1,7 +1,12 @@
 Face Recognition Test
 ---------------------
 
-This is test for Face Recognition lib using DLIB + MKL + AVX Support through a flask app and a client.
+This is a joker project to test Face Recognition library. It has the following configurations/behaviours:
+ 
+  * Face Recognition lib using DLIB + MKL + AVX Support through a falcon endpoint;
+  * Python LogBook;
+  * Automatic logging with fluentd + docker + elasticsearch;
+  * Backup on S3 using Minio.
 
 ## Requirements
 
@@ -25,3 +30,11 @@ Just overwrite the `known/base.jpg` (which is jonatahan goldsmith by default) fi
 
 Just put the desired images in the unknown dir.
 
+## How to Visualize Logs
+
+Access the Kibana in the `localhost:5601` and click on Discover Tab: the application logs will be persisted in json
+format inside the elasticsearch.
+
+## How it Works
+
+**TODO**
