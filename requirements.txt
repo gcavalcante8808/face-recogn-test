@@ -10,3 +10,4 @@ gunicorn
 gevent
 json-logging-py
 boto3
+logbook

@@ -1,6 +1,11 @@
 import logging
 import json
 import time
+import logbook
+
+
+default_logger = logbook.Logger()
+default_handler = logbook.StderrHandler(level='INFO', format_string='{record.message}')
 
 logger = logging.getLogger()
 
@@ -19,12 +24,15 @@ class MatchResultLoggingMiddleware(object):
         """
         Log client, match and name.
         """
-        elapsed = time.time()- req.start_time
+        elapsed = time.time() - req.start_time
         data = {
+            "channel": "falconapp",
             "client": req.media.get('client', 'unknown'),
             "filename": req.media.get('filename', 'unknown_image'),
             "matched": json.loads(resp.body).get("matched"),
             "person": json.loads(resp.body).get("person"),
             "elapsed_time": elapsed
         }
-        logger.warning(json.dumps(data))
+        #
+        with default_handler.applicationbound():
+                default_logger.info(json.dumps(data))
